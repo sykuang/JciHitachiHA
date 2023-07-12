@@ -373,42 +373,37 @@ class JciHitachiClimateEntity(JciHitachiEntity, ClimateEntity):
 
         _LOGGER.debug(f"Set {self.name} swing_mode to {swing_mode}")
 
+        def control_swing_mode(self, vertical, horizontal):
+            status = self.hass.data[DOMAIN][UPDATED_DATA][self._thing.name]
+            if status.vertical_wind_swingable != vertical:
+                self.put_queue(status_name="vertical_wind_swingable", status_str_value=vertical)
+            if status.horizontal_wind_direction != horizontal:
+                self.put_queue(status_name="horizontal_wind_direction", status_str_value=horizontal)
+
         if swing_mode == SWING_OFF:
-            self.put_queue(status_name="vertical_wind_swingable", status_str_value="disabled")
-            self.put_queue(status_name="horizontal_wind_direction", status_str_value="central")
+            control_swing_mode(self, "disabled", "central")
         elif swing_mode == SWING_VERTICAL:
-            self.put_queue(status_name="vertical_wind_swingable", status_str_value="enabled")
-            self.put_queue(status_name="horizontal_wind_direction", status_str_value="central")
+            control_swing_mode(self, "enabled", "central")
         elif swing_mode == SWING_HORIZONTAL:
-            self.put_queue(status_name="vertical_wind_swingable", status_str_value="disabled")
-            self.put_queue(status_name="horizontal_wind_direction", status_str_value="auto")
+            control_swing_mode(self, "disabled", "auto")
         elif swing_mode == SWING_BOTH:
-            self.put_queue(status_name="vertical_wind_swingable",  status_str_value="enabled")
-            self.put_queue(status_name="horizontal_wind_direction", status_str_value="auto")
+            control_swing_mode(self, "enabled", "auto")
         elif swing_mode == SWING_HORIZONTAL_LEFTMOST:
-            self.put_queue(status_name="vertical_wind_swingable", status_str_value="disabled")
-            self.put_queue(status_name="horizontal_wind_direction", status_str_value="leftmost")
+            control_swing_mode(self, "disabled", "leftmost")
         elif swing_mode == SWING_HORIZONTAL_MIDDLE_LEFT:
-            self.put_queue(status_name="vertical_wind_swingable", status_str_value="disabled")
-            self.put_queue(status_name="horizontal_wind_direction", status_str_value="middleleft")
+            control_swing_mode(self, "disabled", "middleleft")
         elif swing_mode == SWING_HORIZONTAL_MIDDLE_RIGHT:
-            self.put_queue(status_name="vertical_wind_swingable", status_str_value="disabled")
-            self.put_queue(status_name="horizontal_wind_direction", status_str_value="middleright")
+            control_swing_mode(self, "disabled", "middleright")
         elif swing_mode == SWING_HORIZONTAL_RIGHTMOST:
-            self.put_queue(status_name="vertical_wind_swingable", status_str_value="disabled")
-            self.put_queue(status_name="horizontal_wind_direction", status_str_value="rightmost")
+            control_swing_mode(self, "disabled", "rightmost")
         elif swing_mode == SWING_HORIZONTAL_LEFTMOST_VERTICAL_SWING:
-            self.put_queue(status_name="vertical_wind_swingable", status_str_value="enabled")
-            self.put_queue(status_name="horizontal_wind_direction", status_str_value="leftmost")
+            control_swing_mode(self, "enabled", "leftmost")
         elif swing_mode == SWING_HORIZONTAL_MIDDLE_LEFT_VERTICAL_SWING:
-            self.put_queue(status_name="vertical_wind_swingable", status_str_value="enabled")
-            self.put_queue(status_name="horizontal_wind_direction", status_str_value="middleleft")
+            control_swing_mode(self, "enabled", "middleleft")
         elif swing_mode == SWING_HORIZONTAL_MIDDLE_RIGHT_VERTICAL_SWING:
-            self.put_queue(status_name="vertical_wind_swingable", status_str_value="enabled")
-            self.put_queue(status_name="horizontal_wind_direction", status_str_value="middleright")
+            control_swing_mode(self, "enabled", "middleright")
         elif swing_mode == SWING_HORIZONTAL_RIGHTMOST_VERTICAL_SWING:
-            self.put_queue(status_name="vertical_wind_swingable", status_str_value="enabled")
-            self.put_queue(status_name="horizontal_wind_direction", status_str_value="rightmost")
+            control_swing_mode(self, "enabled", "rightmost")
         else:
             _LOGGER.error("Invalid swing_mode.")
         self.update()
